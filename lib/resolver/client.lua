@@ -139,4 +139,29 @@ function _M.get(self, exp_fallback_ok)
 end
 
 
+function _M.get_all(self, exp_fallback_ok)
+    local hosts = self._hosts
+    local tot = #hosts
+    local now = ngx.now()
+
+    -- re-sync only if necessary
+    if tot < 1 or now > self._next_sync then
+        sync(self)
+        hosts = self._hosts
+        tot = #hosts
+    end
+    
+    if tot < 1 then
+        return nil, "no hosts available"
+    end
+
+    local addresses = {}
+
+    for i, host in ipairs(hosts) do
+        table.insert(addresses, host.address)
+    end
+
+    return addresses, err
+end
+
 return _M
