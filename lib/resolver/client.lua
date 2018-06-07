@@ -160,6 +160,8 @@ function _M.get_all(self, exp_fallback_ok)
     for i, host in ipairs(hosts) do
         table.insert(addresses, host.address)
     end
+    
+    table.sort(addresses, revsort)
 
     return addresses, err
 end
